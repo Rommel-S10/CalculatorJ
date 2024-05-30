@@ -22,15 +22,19 @@ public class CalculatorApp {
         int operationSelected = digi1.nextInt();
 
         if(operationSelected == 1){
+            Addition sum = new Addition(num1, num2);
             System.out.println(num1 + num2);
         }
         else if(operationSelected ==2){
+            Subtraction sum = new Subtraction(num1, num2);
             System.out.println(num1 - num2);
         }
         else if(operationSelected == 3){
+            Multiplication multi = new Multiplication(num1, num2);
             System.out.println(num1 * num2);
         }
         else if(operationSelected == 4){
+            Division division = new Division(num1, num2);
             System.out.println(num1 / num2);
         }else{
             System.out.println("Error");
