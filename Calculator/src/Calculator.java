@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;;
+import java.awt.event.*;
+import java.lang.reflect.Field;;
 
 public class Calculator implements ActionListener {
 
@@ -13,11 +14,13 @@ public class Calculator implements ActionListener {
 
     JPanel panel;
 
-    double firstDigit =0;
+    double firstDigit = 0;
     double secondDigit = 0;
     double result = 0;
+    char operatorSign;
     Font textFond = new Font("ROMAN_BASELINE", Font.BOLD, 30);
-    Calculator(){
+
+    Calculator() {
 
         calFrame = new JFrame("Calculator in Java");
         calFrame.setVisible(true);
@@ -26,7 +29,7 @@ public class Calculator implements ActionListener {
         calFrame.setLayout(null);
 
         fielddForText = new JTextField();
-        fielddForText.setBounds(25, 75, 300, 100);
+        fielddForText.setBounds(55, 35, 200, 50);
         fielddForText.setBackground(Color.GRAY);
         fielddForText.setFont(textFond);
         fielddForText.setVisible(true);
@@ -55,26 +58,26 @@ public class Calculator implements ActionListener {
         operation[7] = minus1calculator;
         operation[8] = clearBottom;
 
-        for(int operationFunction = 0 ; operationFunction < 9; operationFunction++){
+        for (int operationFunction = 0; operationFunction < 9; operationFunction++) {
             operation[operationFunction].addActionListener(this);
             operation[operationFunction].setFont(textFond);
             operation[operationFunction].setFocusable(false);
         }
 
-        for(int numbers = 0; numbers < 10; numbers ++){
+        for (int numbers = 0; numbers < 10; numbers++) {
             digits[numbers] = new JButton(String.valueOf(numbers));
             digits[numbers].addActionListener(this);
             digits[numbers].setFont(textFond);
             digits[numbers].setFocusable(false);
         }
 
-        subtractionBottom.setBounds(50,430,100,50);
+        subtractionBottom.setBounds(50, 430, 100, 50);
         deleteBottom.setBounds(150, 430, 100, 50);
         clearBottom.setBounds(250, 430, 100, 50);
 
         panel = new JPanel();
-        panel.setBounds(50,100,300,300);
-        panel.setLayout(new GridLayout(4,4,10,10));
+        panel.setBounds(50, 100, 300, 300);
+        panel.setLayout(new GridLayout(4, 4, 10, 10));
 
         panel.add(digits[1]);
         panel.add(digits[2]);
@@ -101,23 +104,75 @@ public class Calculator implements ActionListener {
         calFrame.setVisible(true);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        for (int i = 0; i < 10; i++) {
+            if (e.getSource() == digits[i]) {
+                fielddForText.setText(fielddForText.getText().concat(String.valueOf(i)));
+            }
+
+        }
+        if (e.getSource() == dotBottom) {
+            fielddForText.setText(fielddForText.getText().concat("."));
+        }
+        if (e.getSource() == additionBottom) {
+            firstDigit = Double.parseDouble(fielddForText.getText());
+            operatorSign = '+';
+            fielddForText.setText("");
+        }
+        if (e.getSource() == multiplicationBottom) {
+            firstDigit = Double.parseDouble(fielddForText.getText());
+            operatorSign = '*';
+            fielddForText.setText("");
+        }
+        if (e.getSource() == subtractionBottom) {
+            firstDigit = Double.parseDouble(fielddForText.getText());
+            operatorSign = '-';
+            fielddForText.setText("");
+        }
+        if (e.getSource() == divisionBottom) {
+            firstDigit = Double.parseDouble(fielddForText.getText());
+            operatorSign = '/';
+            fielddForText.setText("");
+        }
+        if (e.getSource() == equalBottom) {
+            secondDigit = Double.parseDouble(fielddForText.getText());
+
+            switch (operatorSign) {
+                case '+':
+                    result = firstDigit + secondDigit;
+                    break;
+                case '-':
+                    result = firstDigit - secondDigit;
+                    break;
+                case '*':
+                    result = firstDigit * secondDigit;
+                    break;
+                case '/':
+                    result = firstDigit / secondDigit;
+                    break;
+            }
+            fielddForText.setText(String.valueOf(result));
+            firstDigit = result;
+        }
+        if (e.getSource() == deleteBottom) {
+            String textInTheField = fielddForText.getText();
+            fielddForText.setText("");
+            for (int i = 0; i < textInTheField.length(); i++) {
+                fielddForText.setText(fielddForText.getText() + textInTheField.charAt(i));
+            }
+        }
+
+        if (e.getSource() == minus1calculator) {
+            double temp = Double.parseDouble(fielddForText.getText());
+            temp *= -1;
+            fielddForText.setText(String.valueOf(temp));
+        }
+
+
     }
 }
+
